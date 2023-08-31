@@ -1,33 +1,23 @@
 from library.libraries import *
 from functions.functions import *
 
-st.title("Country, State, and City Selector using Nominatim API")
+st.title("Country, State, and City Selector using Restcountries API")
 
-country_list = ["Canada", "United States"]
-selected_country = st.selectbox("Select a country", country_list)
+# pycountry를 통해 국가 리스트를 가져옵니다.
+country_list = ["Canada", "United States"]  # 현재 예시에서는 두 국가만 사용합니다.
+selected_country_name = st.selectbox("Select a country", country_list)
 
-# Get country code from selected country name
-country_code = get_country_code(selected_country)
+# 선택된 국가의 이름을 국가 코드로 변환합니다.
+selected_country_code = get_country_code(selected_country_name)
 
-# Get OSM id and OSM type of the selected country using country code
-osm_id, osm_type = get_country_osm_id(country_code)
+# 국가 코드를 사용하여 해당 국가의 상세 정보를 가져옵니다.
+country_data = get_country(selected_country_code)
 
-# If OSM id and OSM type exist, then fetch country details
-if osm_id and osm_type:
-    country_details = get_state_and_city_details(osm_id, osm_type)
-else:
-    country_details = []
+# 국가 데이터를 사용하여 주와 도시의 정보를 가져옵니다.
+# 주의: 현재 get_state와 get_city 함수에서는 간단한 예시 값만 반환합니다.
+# 실제 데이터를 반환하려면 다른 API 또는 데이터 소스가 필요합니다.
+state_data = get_state(country_data)
+city_data = get_city(state_data)
 
-if country_details:
-    states = [detail['address']['state']
-              for detail in country_details if 'address' in detail and 'state' in detail['address']]
-    selected_state = st.selectbox("Select a state", states)
-
-    cities = [detail['address']['city']
-              for detail in country_details if 'address' in detail and 'city' in detail['address']]
-    selected_city = st.selectbox("Select a city", cities)
-
-    st.write(
-        f"You selected: {selected_country} -> {selected_state} -> {selected_city}")
-else:
-    st.write("No details found for the selected country.")
+st.write(
+    f"You selected: {selected_country_name} -> {state_data} -> {city_data}")
