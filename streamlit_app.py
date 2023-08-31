@@ -5,7 +5,14 @@ st.title("Country, State, and City Selector using Nominatim API")
 
 countries = get_available_countries()
 selected_country = st.selectbox("Select a country", countries)
-st.write(selected_country)
+
+# 선택한 나라의 정보를 가져옵니다.
+country_info = get_country_info(selected_country)
+
+# 선택한 나라와 그 나라의 정보를 출력합니다.
+st.write(f"Selected Country: {selected_country}")
+st.write(country_info)
+
 
 # if selected_country:
 #     # 주 선택
