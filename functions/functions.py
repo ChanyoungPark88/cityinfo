@@ -1,43 +1,35 @@
 from library.libraries import *
 
-headers = {
-    "User-Agent": "Get Location Info"  # 앱의 이름을 지정
-}
-
-SEARCH_URL = os.environ.get("SEARCH_URL")
-LOOKUP_URL = os.environ.get("LOOKUP_URL")
+SEARCH_URL = "https://nominatim.openstreetmap.org/search"
+LOOKUP_URL = "https://nominatim.openstreetmap.org/lookup"
 
 
-def get_osm_id_for_country(country_name, SEARCH_URL):
+def get_country_osm_id(country_name):
     params = {
         "q": country_name,
         "format": "json",
-        "limit": 1,  # 첫 번째 결과만 반환
-        "countrycodes": country_name
+        "limit": 1,
+        "addressdetails": 1
     }
-    response = requests.get(SEARCH_URL, params=params, headers=headers)
-    if response.status_code == 200 and response.json():
-        return response.json()[0]['osm_id']
+    response = requests.get(SEARCH_URL, params=params).json()
+    if response:
+        return response[0]['osm_id'], response[0]['osm_type']
     else:
-        return None
+        return None, None
 
 
-def get_detailed_info_by_osm_id(osm_id, LOOKUP_URL):
+def get_country_details(osm_id, osm_type):
     params = {
-        "osm_ids": f"R{osm_id}",  # R은 관계(Relation)를 의미
+        "osm_ids": f"{osm_type[0]}{osm_id}",
         "format": "json"
     }
-    response = requests.get(LOOKUP_URL, params=params, headers=headers)
-    if response.status_code == 200:
-        data = response.json()
-        # 데이터를 적절하게 파싱하여 필요한 정보를 추출합니다.
-        states = [info['address']['state']
-                  for info in data if 'state' in info['address']]
-        cities = [info['address']['city']
-                  for info in data if 'city' in info['address']]
-        return {
-            'states': states,
-            'cities': cities
-        }
+    return requests.get(LOOKUP_URL, params=params).json()
+
+
+def get_state_and_city_details(country_name):
+    osm_id, osm_type = get_country_osm_id(country_name)
+    if osm_id and osm_type:
+        details = get_country_details(osm_id, osm_type)
+        return details
     else:
-        return None
+        return []
