@@ -11,7 +11,7 @@ if selected_country:
     states = get_state_info(selected_country)
     state_names = [state["display_name"].split(",")[0] for state in states]
     selected_state = st.selectbox("Select a state", state_names)
-
+    st.write(selected_state)
     if selected_state:
         # 도시 선택
         cities = get_city_info(selected_country, selected_state)
