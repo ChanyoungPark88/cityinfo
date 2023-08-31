@@ -14,7 +14,7 @@ osm_id, osm_type = get_country_osm_id(country_code)
 
 # If OSM id and OSM type exist, then fetch country details
 if osm_id and osm_type:
-    country_details = get_state_and_city_details(osm_id, osm_type)
+    country_details = get_country_details(osm_id, osm_type)
 else:
     country_details = []
 
