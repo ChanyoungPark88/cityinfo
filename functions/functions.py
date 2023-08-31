@@ -7,7 +7,7 @@ LOOKUP_URL = "https://nominatim.openstreetmap.org/lookup"
 def get_country_osm_id(country_name):
     params = {
         "q": country_name,
-        "format": "json",
+        "format": "jsonv2",
         "limit": 1,
         "addressdetails": 1
     }
@@ -21,7 +21,7 @@ def get_country_osm_id(country_name):
 def get_country_details(osm_id, osm_type):
     params = {
         "osm_ids": f"{osm_type[0]}{osm_id}",
-        "format": "json"
+        "format": "jsonv2"
     }
     return requests.get(LOOKUP_URL, params=params).json()
 
