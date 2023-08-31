@@ -20,6 +20,8 @@ def get_all_country_geoname_ids():
 
 
 def get_country_code(country_name):
+    if country_name == "Please select a country":
+        return None
     return pycountry.countries.get(name=country_name).alpha_2
 
 

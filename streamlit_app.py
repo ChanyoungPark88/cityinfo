@@ -8,7 +8,7 @@ st.title("Country, State, and City Selector using Geonames API")
 country_list = ["Please select a country", "Canada", "United States"]
 selected_country_name = st.selectbox("Select a country", country_list)
 
-if selected_country_name:
+if selected_country_name != "Please select a country":
     # 선택된 국가의 이름을 국가 코드로 변환합니다.
     selected_country_code = get_country_code(selected_country_name)
 
