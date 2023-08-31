@@ -7,7 +7,15 @@ st.title("Country, State, and City Selector using Nominatim API")
 country_list = ["USA", "Germany", "France", "South Korea"]
 selected_country = st.selectbox("Select a country", country_list)
 
-country_details = get_state_and_city_details(selected_country)
+# Get OSM id and OSM type of the selected country
+osm_id, osm_type = get_country_osm_id(selected_country)
+
+# If OSM id and OSM type exist, then fetch country details
+if osm_id and osm_type:
+    country_details = get_state_and_city_details(osm_id, osm_type)
+else:
+    country_details = []
+
 if country_details:
     states = [detail['address']['state']
               for detail in country_details if 'address' in detail and 'state' in detail['address']]
