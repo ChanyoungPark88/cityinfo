@@ -6,6 +6,8 @@ st.title("Country, State, and City Selector")
 # 국가 선택
 countries = get_countries()
 selected_country = st.selectbox("Select a country", list(countries.keys()))
+st.write(
+    f"Selected Country Data: {selected_country} ({countries[selected_country]})")
 
 # if selected_country:
 #     # 주 선택
