@@ -8,10 +8,16 @@ selected_country = st.selectbox("Select a country", countries)
 
 # 선택한 나라의 정보를 가져옵니다.
 country_info = get_country_info(selected_country)
-
-# 선택한 나라와 그 나라의 정보를 출력합니다.
 st.write(f"Selected Country: {selected_country}")
 st.write(country_info)
+
+# 선택한 나라의 주 정보를 가져옵니다.
+state_info = get_state_info(selected_country)
+st.write("States in the selected country:")
+
+# 주 정보를 출력합니다.
+for state in state_info:
+    st.write(state['name'])
 
 
 # if selected_country:
