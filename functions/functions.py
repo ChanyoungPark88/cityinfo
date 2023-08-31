@@ -2,6 +2,21 @@ from library.libraries import *
 
 GEONAMES_URL = "GEONAMES_URL"
 GEONAMES_USERNAME = "GEONAMES_USERNAME"
+COUNTRY_INFO_URL = "COUNTRY_INFO_URL"
+
+
+def get_all_country_geoname_ids():
+    response = requests.get(COUNTRY_INFO_URL, params={
+                            "username": GEONAMES_USERNAME})
+    data = response.json()
+
+    country_geoname_ids = {}
+    for country in data['geonames']:
+        country_code = country['countryCode']
+        geoname_id = country['geonameId']
+        country_geoname_ids[country_code] = geoname_id
+
+    return country_geoname_ids
 
 
 def get_country_code(country_name):
@@ -9,8 +24,11 @@ def get_country_code(country_name):
 
 
 def get_states(country_code):
+    country_geoname_ids = get_all_country_geoname_ids()
+    country_geoname_id = country_geoname_ids.get(country_code)
+
     response = requests.get(GEONAMES_URL, params={
-        "geonameId": get_geoname_id_from_country_code(country_code),
+        "geonameId": country_geoname_id,
         "username": GEONAMES_USERNAME
     })
 
