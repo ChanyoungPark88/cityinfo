@@ -11,14 +11,13 @@ osm_id_country = get_osm_id_for_country(selected_country, SEARCH_URL)
 
 # 주 선택
 if osm_id_country:
-    state_info = get_detailed_info_by_osm_id(osm_id_country, LOOKUP_URL)
-    if state_info:
-        states = [info['display_name']
-                  for info in state_info if info['type'] == 'state']
-        selected_state = st.selectbox("Select a state", states)
+    detailed_info = get_detailed_info_by_osm_id(osm_id_country, LOOKUP_URL)
+    if detailed_info:
+        selected_state = st.selectbox(
+            "Select a state", detailed_info['states'])
 
         # 도시 선택
-        cities = [info['display_name'] for info in state_info if info['type']
-                  == 'city' and selected_state in info['display_name']]
+        cities = [city for city in detailed_info['cities']
+                  if selected_state in city]
         if cities:
             st.selectbox("Select a city", cities)

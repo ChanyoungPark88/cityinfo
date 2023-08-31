@@ -29,6 +29,15 @@ def get_detailed_info_by_osm_id(osm_id, LOOKUP_URL):
     }
     response = requests.get(LOOKUP_URL, params=params, headers=headers)
     if response.status_code == 200:
-        return response.json()
+        data = response.json()
+        # 데이터를 적절하게 파싱하여 필요한 정보를 추출합니다.
+        states = [info['address']['state']
+                  for info in data if 'state' in info['address']]
+        cities = [info['address']['city']
+                  for info in data if 'city' in info['address']]
+        return {
+            'states': states,
+            'cities': cities
+        }
     else:
         return None
