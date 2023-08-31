@@ -10,7 +10,8 @@ selected_country = st.selectbox("Select a country", country_list)
 country_details = get_state_and_city_details(selected_country)
 if country_details:
     states = [detail['address']['state']
-              for detail in country_details if 'state' in detail['address']]
+              for detail in country_details if 'address' in detail and 'state' in detail['address']]
+
     selected_state = st.selectbox("Select a state", states)
 
     cities = [detail['address']['city'] for detail in country_details if 'city' in detail['address']
