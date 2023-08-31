@@ -1,8 +1,9 @@
 import streamlit as st
 import requests
+import os
 
-GEONAMES_API_ENDPOINT = "http://api.geonames.org/"
-GEONAMES_USERNAME = "YOUR_USERNAME"  # Geonames의 사용자 이름을 여기에 입력하세요.
+GEONAMES_API_ENDPOINT = os.environ.get(GEONAMES_API_ENDPOINT)
+GEONAMES_USERNAME = os.environ.get(GEONAMES_USERNAME)
 
 
 def get_countries():
