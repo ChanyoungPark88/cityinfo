@@ -4,7 +4,8 @@ from functions.functions import *
 st.title("Country, State, and City Selector using Geonames API")
 
 # pycountry를 통해 국가 리스트를 가져옵니다.
-country_list = ["Canada", "United States"]  # 현재 예시에서는 두 국가만 사용합니다.
+# 현재 예시에서는 두 국가만 사용합니다.
+country_list = ["Please select a country", "Canada", "United States"]
 selected_country_name = st.selectbox("Select a country", country_list)
 
 if selected_country_name:
