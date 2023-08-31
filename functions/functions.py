@@ -28,6 +28,7 @@ def get_state_info(country_name):
         "format": "json"
     }
     response = requests.get(BASE_URL, params=params)
+    st.write(response.json())
     states = [place for place in response.json() if place['type'] == 'state']
     return states
 
