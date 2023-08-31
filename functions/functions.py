@@ -30,8 +30,8 @@ def get_country_details(osm_id, osm_type):
     return requests.get(LOOKUP_URL, params=params).json()
 
 
-def get_state_and_city_details(country_name):
-    osm_id, osm_type = get_country_osm_id(country_name)
+def get_state_and_city_details(osm_id, osm_type):
+    details = get_country_details(osm_id, osm_type)
     if osm_id and osm_type:
         details = get_country_details(osm_id, osm_type)
         return details
