@@ -14,8 +14,9 @@ if country_details:
 
     selected_state = st.selectbox("Select a state", states)
 
-    cities = [detail['address']['city'] for detail in country_details if 'city' in detail['address']
-              and detail['address']['state'] == selected_state]
+    cities = [detail['address']['city']
+              for detail in country_details if 'address' in detail and 'city' in detail['address']]
+
     selected_city = st.selectbox("Select a city", cities)
     st.write(
         f"You selected: {selected_country} -> {selected_state} -> {selected_city}")
