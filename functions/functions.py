@@ -1,25 +1,28 @@
 from library.libraries import *
 
-RESTCOUNTRIES_URL = "RESTCOUNTRIES_URL"
+GEONAMES_URL = "GEONAMES_URL"
+GEONAMES_USERNAME = "GEONAMES_USERNAME"
 
 
 def get_country_code(country_name):
     return pycountry.countries.get(name=country_name).alpha_2
 
 
-def get_country(country_code):
-    response = requests.get(f"{RESTCOUNTRIES_URL}/alpha/{country_code}")
+def get_states(country_code):
+    response = requests.get(GEONAMES_URL, params={
+        "geonameId": get_geoname_id_from_country_code(country_code),
+        "username": GEONAMES_USERNAME
+    })
+
     data = response.json()
-    return data
+    return [{"name": state["name"], "code": state["geonameId"]} for state in data["geonames"]]
 
 
-def get_state(country_data):
-    # Restcountries API에서는 '주'에 해당하는 구체적인 정보를 제공하지 않기 때문에
-    # 여기서는 대신 국가 이름을 반환하거나 다른 소스를 사용해야 합니다.
-    return country_data['name']['common']
+def get_cities(state_code):
+    response = requests.get(GEONAMES_URL, params={
+        "geonameId": state_code,
+        "username": GEONAMES_USERNAME
+    })
 
-
-def get_city(state_data):
-    # 마찬가지로 '도시'에 해당하는 정보도 제공하지 않으므로
-    # 국가 또는 주의 주요 도시를 반환하거나 다른 소스를 사용해야 합니다.
-    return "Sample City"
+    data = response.json()
+    return [{"name": city["name"], "code": city["geonameId"]} for city in data["geonames"]]
