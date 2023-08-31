@@ -10,7 +10,7 @@ def get_available_countries():
 
 
 def get_country_info(country_name):
-    if country_name not in ["Canada", "USA"]:
+    if country_name not in ["Canada", "United States"]:
         return []
 
     params = {
