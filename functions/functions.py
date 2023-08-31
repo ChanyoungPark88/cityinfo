@@ -4,15 +4,19 @@ SEARCH_URL = "https://nominatim.openstreetmap.org/search"
 LOOKUP_URL = "https://nominatim.openstreetmap.org/lookup"
 
 
-def get_country_osm_id(country_name):
+def get_country_code(country_name):
+    return pycountry.countries.get(name=country_name).alpha_2
+
+
+def get_country_osm_id(country_code):
     params = {
-        "q": country_name,
-        "format": "jsonv2",
+        "q": country_code,
+        "format": "json",
         "limit": 1,
         "addressdetails": 1
     }
     response = requests.get(SEARCH_URL, params=params).json()
-    if response:
+    if response and 'country_code' in response[0]['address'] and response[0]['address']['country_code'].lower() == country_code.lower():
         return response[0]['osm_id'], response[0]['osm_type']
     else:
         return None, None
