@@ -12,9 +12,15 @@ def get_countries():
     return {country["countryName"]: country["countryCode"] for country in countries}
 
 
+# def get_states(country_code):
+#     url = f"{API_ENDPOINT}admin1CodeJSON?country={country_code}&username={USERNAME}"
+#     response = requests.get(url)
+#     states = response.json().get("geonames", [])
+#     return {state["name"]: state["adminCode1"] for state in states}
 def get_states(country_code):
     url = f"{API_ENDPOINT}admin1CodeJSON?country={country_code}&username={USERNAME}"
     response = requests.get(url)
+    print(response.text)  # API 응답 출력
     states = response.json().get("geonames", [])
     return {state["name"]: state["adminCode1"] for state in states}
 
