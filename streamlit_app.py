@@ -32,6 +32,7 @@ if selected_country_name != "Select a country":
         if selected_city_name != "Select a city":
             city_name_for_url = selected_city_name.lower().replace(" ", "-")
             # 주의 약자를 가져옵니다.
-            state_name_for_url = selected_state_name.split()[-1].lower()
-            zillow_url = f"https://www.zillow.com/{city_name_for_url}-{selected_state_code}/"
+            state_code_for_url = get_state_code(
+                selected_country_name, selected_state_name)
+            zillow_url = f"https://www.zillow.com/{city_name_for_url}-{state_code_for_url.lower()}/"
             st.write(f"Zillow Search URL: {zillow_url}")

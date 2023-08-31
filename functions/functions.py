@@ -23,6 +23,18 @@ def get_country_code(country_name):
     return pycountry.countries.get(name=country_name).alpha_2
 
 
+def get_state_code(country_name, state_name):
+    try:
+        subdivisions = list(pycountry.subdivisions.get(
+            country_name=country_name))
+        for subdivision in subdivisions:
+            if subdivision.name == state_name:
+                return subdivision.code.split('-')[-1]  # 'US-CA'에서 'CA' 부분만 반환
+        return None
+    except Exception:
+        return None
+
+
 def get_states(country_code):
     country_geoname_ids = get_all_country_geoname_ids()
     country_geoname_id = country_geoname_ids.get(country_code)
