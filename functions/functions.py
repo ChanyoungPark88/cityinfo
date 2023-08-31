@@ -9,14 +9,12 @@ def get_countries():
     url = f"{API_ENDPOINT}countryInfoJSON?username={USERNAME}"
     response = requests.get(url)
     countries = response.json().get("geonames", [])
-    return {country["countryName"]: country["countryCode"] for country in countries}
+    # 캐나다와 미국만 필터링
+    filtered_countries = {country["countryName"]: country["countryCode"]
+                          for country in countries if country["countryCode"] in ["CA", "US"]}
+    return filtered_countries
 
 
-# def get_states(country_code):
-#     url = f"{API_ENDPOINT}admin1CodeJSON?country={country_code}&username={USERNAME}"
-#     response = requests.get(url)
-#     states = response.json().get("geonames", [])
-#     return {state["name"]: state["adminCode1"] for state in states}
 def get_states(country_code):
     url = f"{API_ENDPOINT}admin1CodeJSON?country={country_code}&username={USERNAME}"
     response = requests.get(url)
