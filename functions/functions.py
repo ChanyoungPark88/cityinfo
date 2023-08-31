@@ -1,8 +1,8 @@
 from library.libraries import *
 
-GEONAMES_URL = "GEONAMES_URL"
-GEONAMES_USERNAME = "GEONAMES_USERNAME"
-COUNTRY_INFO_URL = "COUNTRY_INFO_URL"
+GEONAMES_URL = os.environ.get("GEONAMES_URL")
+GEONAMES_USERNAME = os.environ.get("GEONAMES_USERNAME")
+COUNTRY_INFO_URL = os.environ.get("COUNTRY_INFO_URL")
 
 
 def get_all_country_geoname_ids():
