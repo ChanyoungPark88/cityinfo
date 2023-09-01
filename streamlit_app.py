@@ -1,38 +1,32 @@
 from library.libraries import *
 from functions.functions import *
 
-
 st.title("Zillow Search URL Generator using Country, State, and City")
 
-# pycountry를 통해 국가 리스트를 가져옵니다.
-country_list = ["Canada", "United States"]  # 현재 예시에서는 두 국가만 사용합니다.
+# 초기 시작 시 모든 데이터를 로딩
+all_countries = get_all_countries()
+all_states = get_all_states()
+all_cities = get_all_cities()
+
+# 국가 선택 Dropdown
 selected_country_name = st.selectbox(
-    "Select a country", ["Select a country"] + country_list)
+    "Select a country", ["Select a country"] + list(all_countries.keys()))
 
-# if selected_country_name != "Select a country":
-selected_country_code = get_country_code(selected_country_name)
+# 선택된 국가에 따른 주/지방 목록 필터링 및 Dropdown
+if selected_country_name and selected_country_name != "Select a country":
+    states_in_selected_country = all_states[selected_country_name]
+    selected_state_name = st.selectbox(
+        "Select a state", ["Select a state"] + states_in_selected_country)
 
-# 국가 코드를 사용하여 해당 국가의 주/지방 목록을 가져옵니다.
-state_data = get_states(selected_country_code)
-state_names = [state["name"] for state in state_data]
-selected_state_name = st.selectbox(
-    "Select a state", ["Select a state"] + state_names)
+    # 선택된 주/지방에 따른 도시 목록 필터링 및 Dropdown
+    if selected_state_name and selected_state_name != "Select a state":
+        cities_in_selected_state = all_cities[selected_state_name]
+        selected_city_name = st.selectbox(
+            "Select a city", ["Select a city"] + cities_in_selected_state)
 
-# if selected_state_name != "Select a state":
-# 선택된 주/지방의 이름을 주/지방 코드로 변환합니다.
-selected_state_code = next(
-    state["code"] for state in state_data if state["name"] == selected_state_name)
-
-# 주/지방 코드를 사용하여 해당 주/지방의 도시 목록을 가져옵니다.
-city_data = get_cities(selected_state_code)
-city_names = [city["name"] for city in city_data]
-selected_city_name = st.selectbox(
-    "Select a city", ["Select a city"] + city_names)
-
-# if selected_city_name != "Select a city":
-city_name_for_url = selected_city_name.lower().replace(" ", "-")
-# 주의 약자를 가져옵니다.
-state_code_for_url = get_state_code(
-    selected_country_name, selected_state_name)
-zillow_url = f"https://www.zillow.com/{city_name_for_url}-{state_code_for_url.lower()}/"
-st.write(f"Zillow Search URL: {zillow_url}")
+        if selected_city_name and selected_city_name != "Select a city":
+            city_name_for_url = selected_city_name.lower().replace(" ", "-")
+            state_code_for_url = get_state_code(
+                selected_country_name, selected_state_name)
+            zillow_url = f"https://www.zillow.com/{city_name_for_url}-{state_code_for_url.lower()}/"
+            st.write(f"Zillow Search URL: {zillow_url}")
