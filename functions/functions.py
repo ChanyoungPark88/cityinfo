@@ -56,3 +56,18 @@ def get_cities(state_code):
 
     data = response.json()
     return [{"name": city["name"], "code": city["geonameId"]} for city in data["geonames"]]
+
+
+def get_all_data():
+    # 국가 코드와 ID 매핑
+    country_ids = get_all_country_geoname_ids()
+
+    # 각 국가별 주/지방 정보
+    all_states = {country_code: get_states(
+        country_code) for country_code in country_ids.keys()}
+
+    # 각 주/지방별 도시 정보
+    all_cities = {state['code']: get_cities(
+        state['code']) for states in all_states.values() for state in states}
+
+    return country_ids, all_states, all_cities

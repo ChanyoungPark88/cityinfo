@@ -1,30 +1,28 @@
 from library.libraries import *
 from functions.functions import *
 
+# 전역 변수로 모든 데이터 로드
+ALL_COUNTRY_IDS, ALL_STATES, ALL_CITIES = get_all_data()
+
 st.title("Zillow Search URL Generator using Country, State, and City")
 
-# 초기 시작 시 모든 데이터를 로딩
-all_countries = get_all_countries()
-all_states = get_all_states()
-all_cities = get_all_cities()
-
-# 국가 선택 Dropdown
+country_list = list(ALL_COUNTRY_IDS.keys())
 selected_country_name = st.selectbox(
-    "Select a country", ["Select a country"] + list(all_countries.keys()))
+    "Select a country", ["Select a country"] + country_list)
 
-# 선택된 국가에 따른 주/지방 목록 필터링 및 Dropdown
-if selected_country_name and selected_country_name != "Select a country":
-    states_in_selected_country = all_states[selected_country_name]
+if selected_country_name != "Select a country":
+    state_data = ALL_STATES.get(selected_country_name)
+    state_names = [state["name"] for state in state_data]
     selected_state_name = st.selectbox(
-        "Select a state", ["Select a state"] + states_in_selected_country)
+        "Select a state", ["Select a state"] + state_names)
 
-    # 선택된 주/지방에 따른 도시 목록 필터링 및 Dropdown
-    if selected_state_name and selected_state_name != "Select a state":
-        cities_in_selected_state = all_cities[selected_state_name]
+    if selected_state_name:
+        city_data = ALL_CITIES.get(selected_state_name)
+        city_names = [city["name"] for city in city_data]
         selected_city_name = st.selectbox(
-            "Select a city", ["Select a city"] + cities_in_selected_state)
+            "Select a city", ["Select a city"] + city_names)
 
-        if selected_city_name and selected_city_name != "Select a city":
+        if selected_city_name:
             city_name_for_url = selected_city_name.lower().replace(" ", "-")
             state_code_for_url = get_state_code(
                 selected_country_name, selected_state_name)
