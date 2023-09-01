@@ -2,7 +2,7 @@ from library.libraries import *
 from functions.functions import *
 
 # 전역 변수로 모든 데이터 로드
-ALL_COUNTRY_IDS, ALL_STATES, ALL_CITIES = get_all_data()
+ALL_COUNTRY_IDS, ALL_STATES, ALL_CITIES = load_all_data()
 
 st.title("Zillow Search URL Generator using Country, State, and City")
 
