@@ -1,3 +1,9 @@
+"""
+This module imports necessary libraries for a Streamlit application.
+It provides all the required external libraries and functions needed for the app's functionality
+such as Google Cloud Storage access, data manipulation with pandas,
+and user interface with Streamlit.
+"""
 from library.libraries import (
     base64, json, os, storage, URLError, st, pd, io
 )
@@ -110,16 +116,17 @@ def get_cities_from_province(data_frame, province_name):
 
 
 def generate_zillow_url(city, state_or_province, lat, lng):
-    """_summary_
+    """
+    Generate a Zillow search URL based on the given parameters.
 
     Args:
-        city (_type_): _description_
-        state_or_province (_type_): _description_
-        lat (_type_): _description_
-        lng (_type_): _description_
+    - city (str): Name of the city.
+    - state_or_province (str): Name of the state or province.
+    - lat (float): Latitude of the city's center.
+    - lng (float): Longitude of the city's center.
 
     Returns:
-        _type_: _description_
+    - str: A URL string for Zillow search based on the given parameters.
     """
     base_url = "https://www.zillow.com"
 
@@ -129,10 +136,26 @@ def generate_zillow_url(city, state_or_province, lat, lng):
     east = lng + 0.5
     west = lng - 0.5
 
-    # URL을 생성합니다
-    url = (
-        f"{base_url}/{city}-{state_or_province}/?searchQueryState=%7B%22pagination%22%3A%7B%7D%2C"
-        f"%22mapBounds%22%3A%7B%22north%22%3A{north}%2C%22east%22%3A{east}%2C%22south%22%3A{south}%2C%22west%22%3A{west}%7D%2C"
-        "%22isMapVisible%22%3Atrue%2C%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C%22ah%22%3A%7B%22value%22%3Atrue%7D%7D%2C%22isListVisible%22%3Atrue%7D"
+    # URL 섹션을 별도로 구성합니다
+    url_path = f"{base_url}/{city.lower()}-{state_or_province.lower()}/"
+    query_pagination = "%7B%22pagination%22%3A%7B%7D%2C"
+    query_map_bounds = (f"%22mapBounds%22%3A%7B%22north%22%3A{north}%2C%22east%22%3A{east}%2C"
+                        f"%22south%22%3A{south}%2C%22west%22%3A{west}%7D%2C")
+    query_map_vis = "%22isMapVisible%22%3Atrue%2C"
+    query_filter_state = (
+        "%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C"
+        "%22ah%22%3A%7B%22value%22%3Atrue%7D%7D%2C"
     )
+    query_list_vis = "%22isListVisible%22%3Atrue%7D"
+
+    # 섹션을 결합하여 최종 URL을 생성합니다
+    url = (
+        f"{url_path}?searchQueryState="
+        f"{query_pagination}"
+        f"{query_map_bounds}"
+        f"{query_map_vis}"
+        f"{query_filter_state}"
+        f"{query_list_vis}"
+    )
+
     return url
