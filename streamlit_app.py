@@ -31,14 +31,16 @@ if selected_country_name != "Select a country":
             selected_country_name, selected_state_name)
 
         st.write(f"Selected state code: {selected_state_code}")
+        test_code = get_state_code("United States", "New Jersey")
+        st.write(f"Test state code for New Jersey: {test_code}")
 
         # 주/지방 코드를 사용하여 해당 주/지방의 도시 목록을 가져옵니다.
-        city_data = get_cities(selected_state_name, selected_country_name)
-        city_names = [city["name"] for city in city_data]
-        selected_city_name = st.selectbox(
-            "Select a city", ["Select a city"] + city_names)
+        # city_data = get_cities(selected_state_name, selected_country_name)
+        # city_names = [city["name"] for city in city_data]
+        # selected_city_name = st.selectbox(
+        #     "Select a city", ["Select a city"] + city_names)
 
-        if selected_city_name != "Select a city":
-            city_name_for_url = selected_city_name.lower().replace(" ", "-")
-            zillow_url = f"https://www.zillow.com/{city_name_for_url}-{selected_state_code.lower()}/"
-            st.write(f"Zillow Search URL: {zillow_url}")
+        # if selected_city_name != "Select a city":
+        #     city_name_for_url = selected_city_name.lower().replace(" ", "-")
+        #     zillow_url = f"https://www.zillow.com/{city_name_for_url}-{selected_state_code.lower()}/"
+        #     st.write(f"Zillow Search URL: {zillow_url}")
