@@ -33,7 +33,7 @@ if selected_country_name != "Select a country":
         st.write(f"Selected state code: {selected_state_code}")
 
         # 주/지방 코드를 사용하여 해당 주/지방의 도시 목록을 가져옵니다.
-        city_data = get_cities(selected_state_code)
+        city_data = get_cities(selected_state_geonameId)
         city_names = [city["name"] for city in city_data]
         selected_city_name = st.selectbox(
             "Select a city", ["Select a city"] + city_names)
