@@ -107,6 +107,7 @@ def get_cities(state_code):
     })
 
     data = response.json()
+    print(data)
     return [{"name": city["name"], "code": city["geonameId"]} for city in data["geonames"]]
 
 
