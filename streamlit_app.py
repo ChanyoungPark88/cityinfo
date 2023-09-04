@@ -40,5 +40,5 @@ if selected_country_name != "Select a country":
 
         if selected_city_name != "Select a city":
             city_name_for_url = selected_city_name.lower().replace(" ", "-")
-            zillow_url = f"https://www.zillow.com/{city_name_for_url}-{selected_state_code}/"
+            zillow_url = f"https://www.zillow.com/{city_name_for_url}-{selected_state_code.lower()}/"
             st.write(f"Zillow Search URL: {zillow_url}")
