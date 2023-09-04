@@ -39,7 +39,9 @@ elif selected_country_name == "United States":
                 city_lat = city_data['lat']
                 city_lng = city_data['lng']
                 state_id = city_data['state_id']
-
+                region_id = city_data['RegionID']
+                region_type = city_data['RegionType']
                 zillow_url = generate_zillow_url(
-                    selected_city, state_id, city_lat, city_lng)
+                    selected_city, state_id, city_lat, city_lng, region_id, region_type)
+
                 st.write(f"Zillow URL: {zillow_url}")
