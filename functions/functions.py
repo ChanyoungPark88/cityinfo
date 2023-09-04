@@ -106,9 +106,7 @@ def get_cities(state_code):
         "username": GEONAMES_USERNAME
     })
 
-    data = response.json()
-    print(data)
-    return [{"name": city["name"], "code": city["geonameId"]} for city in data["results"]]
+    return response.json()
 
 
 def load_all_data():
