@@ -122,25 +122,9 @@ def get_region_id_from_csv(data_frame, city, state_or_province):
 
 
 def generate_zillow_url(city, state_or_province, lat, lng, region_id, region_type):
-    """
-    Generate a Zillow search URL based on the given parameters.
-
-    Args:
-    - city (str): Name of the city.
-    - state_or_province (str): Name of the state or province.
-    - lat (float): Latitude of the city's center.
-    - lng (float): Longitude of the city's center.
-    - region_id (int, optional): ID of the region.
-
-    Returns:
-    - str: A URL string for Zillow search based on the given parameters.
-    """
     base_url = "https://www.zillow.com"
-
-    # 도시의 이름에서 공백은 '-'로 대체합니다.
     city = city.replace(" ", "-")
 
-    # 대략적인 지도의 경계값을 계산합니다 (예: +/-0.5도)
     north = lat + 0.5
     south = lat - 0.5
     east = lng + 0.5
@@ -149,35 +133,30 @@ def generate_zillow_url(city, state_or_province, lat, lng, region_id, region_typ
     if region_type == "city":
         region_type_value = 6
     else:
-        region_type_value = 6  # 기본 값이라고 가정
+        region_type_value = 6
 
     # URL 섹션을 별도로 구성합니다
     url_path = f"{base_url}/{city.lower()}-{state_or_province.lower()}/"
     query_pagination = "%7B%22pagination%22%3A%7B%7D%2C"
     query_user_term = f"%22usersSearchTerm%22%3A%22{city}%2C%20{state_or_province}%22%2C"
-    query_map_bounds = (f"%22mapBounds%22%3A%7B%22north%22%3A{north}%2C%22east%22%3A{east}%2C"
-                        f"%22south%22%3A{south}%2C%22west%22%3A{west}%7D%2C")
-    query_region = (
-        f"%22regionSelection%22%3A%5B%7B%22regionId%22%3A{region_id}%2C"
-        f"%22regionType%22%3A{region_type_value}%7D%5D%2C")
+    query_map_bounds = (f"%22mapBounds%22%3A%7B%22west%22%3A{west}%2C%22east%22%3A{east}%2C"
+                        f"%22south%22%3A{south}%2C%22north%22%3A{north}%7D%2C")
+    query_region = (f"%22regionSelection%22%3A%5B%7B%22regionId%22%3A{region_id}%2C"
+                    f"%22regionType%22%3A{region_type_value}%7D%5D%2C")
     query_map_vis = "%22isMapVisible%22%3Atrue%2C"
-    query_filter_state = (
-        "%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C"
-        "%22ah%22%3A%7B%22value%22%3Atrue%7D%7D%2C"
-    )
+    query_filter_state = ("%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C"
+                          "%22ah%22%3A%7B%22value%22%3Atrue%7D%7D%2C")
     query_list_vis = "%22isListVisible%22%3Atrue%7D"
 
     # 섹션을 결합하여 최종 URL을 생성합니다
-    url = (
-        f"{url_path}?searchQueryState="
-        f"{query_pagination}"
-        f"{query_user_term}"
-        f"{query_map_bounds}"
-        f"{query_region}"
-        f"{query_map_vis}"
-        f"{query_filter_state}"
-        f"{query_list_vis}"
-    )
+    url = (f"{url_path}?searchQueryState="
+           f"{query_pagination}"
+           f"{query_user_term}"
+           f"{query_map_bounds}"
+           f"{query_region}"
+           f"{query_map_vis}"
+           f"{query_filter_state}"
+           f"{query_list_vis}")
 
     return url
 
