@@ -2,7 +2,7 @@
 based on the user's country, state, and city selections.
 """
 from library.libraries import st
-from functions.functions import get_country_code, get_states, get_state_code, get_cities
+from function.functions import gcs_connect, download_file_from_gcs
 
 st.title("Zillow Search URL Generator using Country, State, and City")
 
@@ -11,37 +11,17 @@ country_list = ["Canada", "United States"]  # 현재 예시에서는 두 국가�
 selected_country_name = st.selectbox(
     "Select a country", ["Select a country"] + country_list)
 
-if selected_country_name != "Select a country":
-    selected_country_code = get_country_code(selected_country_name)
-    st.write(f"Selected country code: {selected_country_code}")
+if selected_country_name == "Canada":
+    FILENAME = "canadacities_selected.csv"
+elif selected_country_name == "United States":
+    FILENAME = "uscities_selected.csv"
+else:
+    FILENAME = None
 
-    # # 국가 코드를 사용하여 해당 국가의 주/지방 목록을 가져옵니다.
-    state_data = get_states(selected_country_code)
-    state_names = [state["name"] for state in state_data]
-    selected_state_name = st.selectbox(
-        "Select a state", ["Select a state"] + state_names)
-
-    if selected_state_name != "Select a state":
-        # GeonameId (정수값)을 가져옵니다.
-        selected_state_geonameId = next(
-            state["code"] for state in state_data if state["name"] == selected_state_name)
-
-        # GeonameId를 사용하여 주의 코드를 가져옵니다. 예: "AL"
-        selected_state_code = get_state_code(
-            selected_country_name, selected_state_name)
-
-        st.write(f"Selected state code: {selected_state_code}")
-        st.write(f"Selected state geonameId: {selected_state_geonameId}")
-        test_code = get_state_code("United States", "New Jersey")
-        st.write(f"Test state code for New Jersey: {test_code}")
-
-        # 주/지방 코드를 사용하여 해당 주/지방의 도시 목록을 가져옵니다.
-        # city_data = get_cities(selected_state_name, selected_country_name)
-        # city_names = [city["name"] for city in city_data]
-        # selected_city_name = st.selectbox(
-        #     "Select a city", ["Select a city"] + city_names)
-
-        # if selected_city_name != "Select a city":
-        #     city_name_for_url = selected_city_name.lower().replace(" ", "-")
-        #     zillow_url = f"https://www.zillow.com/{city_name_for_url}-{selected_state_code.lower()}/"
-        #     st.write(f"Zillow Search URL: {zillow_url}")
+if FILENAME:
+    storage_client = gcs_connect()
+    if storage_client:  # Ensure that the storage client was successfully initialized
+        data_frame = download_file_from_gcs(FILENAME, storage_client)
+        if data_frame is not None:
+            # Display the data or do further processing...
+            st.write(data_frame)
