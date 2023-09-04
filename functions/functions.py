@@ -106,7 +106,7 @@ def get_cities(state_code):
         "username": GEONAMES_USERNAME
     })
 
-    return response.json()
+    return response.text
 
 
 def load_all_data():
