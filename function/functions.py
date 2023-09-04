@@ -133,23 +133,23 @@ def generate_zillow_url(city, state_or_province, lat, lng, region_id, region_typ
     if region_type == "city":
         region_type_value = 6
     else:
-        region_type_value = 6
+        region_type_value = 6  # 임의로 같은 값을 지정하였습니다. 필요시 수정이 필요합니다.
 
     # URL 섹션을 별도로 구성합니다
-    url_path = f"{base_url}/{city.lower()}-{state_or_province.lower()}/"
+    url_path = f"{base_url}/{city.lower()}-{state_or_province.lower()}/houses/"
     query_pagination = "%7B%22pagination%22%3A%7B%7D%2C"
-    query_user_term = f"%22usersSearchTerm%22%3A%22{city}%2C%20{state_or_province}%22%2C"
-    query_map_bounds = (f"%22mapBounds%22%3A%7B%22west%22%3A{west}%2C%22east%22%3A{east}%2C"
+    query_user_term = f"%22userssearchterm%22%3A%22{city}%2C%20{state_or_province}%22%2C"
+    query_map_bounds = (f"%22mapbounds%22%3A%7B%22west%22%3A{west}%2C%22east%22%3A{east}%2C"
                         f"%22south%22%3A{south}%2C%22north%22%3A{north}%7D%2C")
-    query_region = (f"%22regionSelection%22%3A%5B%7B%22regionId%22%3A{region_id}%2C"
-                    f"%22regionType%22%3A{region_type_value}%7D%5D%2C")
-    query_map_vis = "%22isMapVisible%22%3Atrue%2C"
-    query_filter_state = ("%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C"
-                          "%22ah%22%3A%7B%22value%22%3Atrue%7D%7D%2C")
-    query_list_vis = "%22isListVisible%22%3Atrue%7D"
+    query_region = (f"%22regionselection%22%3A%5B%7B%22regionid%22%3A{region_id}%2C"
+                    f"%22regiontype%22%3A{region_type_value}%7D%5D%2C")
+    query_map_vis = "%22ismapvisible%22%3Atrue%2C"
+    query_filter_state = ("%22filterstate%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C"
+                          "%22ah%22%3A%7B%22value%22%3Atrue%7D%2C%22mapzoom%22%3A11%7D%2C")
+    query_list_vis = "%22islistvisible%22%3Atrue%7D"
 
     # 섹션을 결합하여 최종 URL을 생성합니다
-    url = (f"{url_path}?searchQueryState="
+    url = (f"{url_path}?searchquerystate="
            f"{query_pagination}"
            f"{query_user_term}"
            f"{query_map_bounds}"
