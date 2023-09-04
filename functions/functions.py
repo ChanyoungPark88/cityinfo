@@ -32,15 +32,19 @@ def get_all_country_geoname_ids():
 
 
 def get_country_code(country_name):
-    """Get the country code for a given country name.
+    """Retrieve the country code based on the country name.
 
     Args:
         country_name (str): Name of the country.
 
     Returns:
-        str: Country code for the given country name.
+        str or None: Country code if found, None otherwise.
     """
-    return pycountry.countries.get(name=country_name).alpha_2
+    try:
+        country = pycountry.countries.get(name=country_name)
+        return country.alpha_2  # Returns the two-letter country code, e.g., "US"
+    except AttributeError:
+        return None
 
 
 def get_state_code(country_name, state_name):
@@ -54,8 +58,11 @@ def get_state_code(country_name, state_name):
         str or None: State code if found, None otherwise.
     """
     try:
+        # First, get the country code using the country name.
+        country_code = get_country_code(country_name)
+
         subdivisions = list(pycountry.subdivisions.get(
-            country_name=country_name))
+            country_code=country_code))
         for subdivision in subdivisions:
             if subdivision.name == state_name:
                 return subdivision.code.split('-')[-1]  # 'US-CA'에서 'CA' 부분만 반환
