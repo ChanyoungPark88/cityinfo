@@ -26,6 +26,7 @@ if selected_country_name != "Select a country":
             state["code"] for state in state_data if state["name"] == selected_state_name)
         selected_state_code = selected_state_code_temp.lower() if isinstance(
             selected_state_code_temp, str) else selected_state_code_temp
+        st.write(f"Selected state code: {selected_state_code}")
 
 # 선택된 주/지방의 이름을 주/지방 코드로 변환합니다.
 # selected_state_code = next(
