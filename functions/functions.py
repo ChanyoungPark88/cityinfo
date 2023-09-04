@@ -1,4 +1,11 @@
-from library.libraries import *
+"""Streamlit app to generate a Zillow search URL.
+
+Attributes:
+    GEONAMES_URL (str): URL for the GeoNames API endpoint.
+    GEONAMES_USERNAME (str): Username for the GeoNames API.
+    COUNTRY_INFO_URL (str): URL for the country information API endpoint.
+"""
+from library.libraries import os, requests, pycountry
 
 GEONAMES_URL = os.environ.get("GEONAMES_URL")
 GEONAMES_USERNAME = os.environ.get("GEONAMES_USERNAME")
@@ -6,6 +13,11 @@ COUNTRY_INFO_URL = os.environ.get("COUNTRY_INFO_URL")
 
 
 def get_all_country_geoname_ids():
+    """Retrieve a dictionary mapping country codes to geoname IDs.
+
+    Returns:
+        dict: Dictionary of country codes and corresponding geoname IDs.
+    """
     response = requests.get(COUNTRY_INFO_URL, params={
                             "username": GEONAMES_USERNAME})
     data = response.json()
@@ -20,10 +32,27 @@ def get_all_country_geoname_ids():
 
 
 def get_country_code(country_name):
+    """Get the country code for a given country name.
+
+    Args:
+        country_name (str): Name of the country.
+
+    Returns:
+        str: Country code for the given country name.
+    """
     return pycountry.countries.get(name=country_name).alpha_2
 
 
 def get_state_code(country_name, state_name):
+    """Retrieve the state code based on the country and state names.
+
+    Args:
+        country_name (str): Name of the country.
+        state_name (str): Name of the state.
+
+    Returns:
+        str or None: State code if found, None otherwise.
+    """
     try:
         subdivisions = list(pycountry.subdivisions.get(
             country_name=country_name))
@@ -36,6 +65,14 @@ def get_state_code(country_name, state_name):
 
 
 def get_states(country_code):
+    """Fetch a list of states for a given country code.
+
+    Args:
+        country_code (str): Country code to fetch states for.
+
+    Returns:
+        list: List of dictionaries containing state names and geoname IDs.
+    """
     country_geoname_ids = get_all_country_geoname_ids()
     country_geoname_id = country_geoname_ids.get(country_code)
 
@@ -49,6 +86,14 @@ def get_states(country_code):
 
 
 def get_cities(state_code):
+    """Obtain a list of cities for a specified state code.
+
+    Args:
+        state_code (str): State code to retrieve cities for.
+
+    Returns:
+        list: List of dictionaries containing city names and geoname IDs.
+    """
     response = requests.get(GEONAMES_URL, params={
         "geonameId": state_code,
         "username": GEONAMES_USERNAME
@@ -59,6 +104,12 @@ def get_cities(state_code):
 
 
 def load_all_data():
+    """Gather a comprehensive set of location data.
+
+    Returns:
+        tuple: Tuple containing dictionaries of country codes to geoname IDs,
+        states to cities, and states to geoname IDs.
+    """
     # 국가 코드와 ID 매핑
     country_ids = get_all_country_geoname_ids()
 
