@@ -31,6 +31,7 @@ if selected_country_name != "Select a country":
             selected_country_name, selected_state_name)
 
         st.write(f"Selected state code: {selected_state_code}")
+        st.write(f"Selected state geonameId: {selected_state_geonameId}")
         test_code = get_state_code("United States", "New Jersey")
         st.write(f"Test state code for New Jersey: {test_code}")
 
