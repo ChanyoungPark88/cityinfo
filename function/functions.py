@@ -159,7 +159,7 @@ def generate_zillow_url(city, state_or_province, lat, lng, region_id, region_typ
                         f"%22south%22%3A{south}%2C%22west%22%3A{west}%7D%2C")
     query_region = (
         f"%22regionSelection%22%3A%5B%7B%22regionId%22%3A{region_id}%2C"
-        "%22regionType%22%3A{region_type_value}%7D%5D%2C")
+        f"%22regionType%22%3A{region_type_value}%7D%5D%2C")
     query_map_vis = "%22isMapVisible%22%3Atrue%2C"
     query_filter_state = (
         "%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C"
