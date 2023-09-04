@@ -121,7 +121,7 @@ def get_region_id_from_csv(data_frame, city, state_or_province):
     return None
 
 
-def generate_zillow_url(data_frame, city, state_or_province, lat, lng, region_id=None):
+def generate_zillow_url(city, state_or_province, lat, lng, region_id=None):
     """
     Generate a Zillow search URL based on the given parameters.
 
@@ -139,7 +139,6 @@ def generate_zillow_url(data_frame, city, state_or_province, lat, lng, region_id
 
     # 도시의 이름에서 공백은 '-'로 대체합니다.
     city = city.replace(" ", "-")
-    region_id = get_region_id_from_csv(data_frame, city, state_or_province)
 
     # 대략적인 지도의 경계값을 계산합니다 (예: +/-0.5도)
     north = lat + 0.5
