@@ -98,7 +98,30 @@ def get_cities_from_state(data_frame, state_name):
     return sorted_df[sorted_df["state_name"] == state_name]["city"].dropna().astype(str).tolist()
 
 
-def generate_zillow_url(city, state_or_province, lat, lng):
+def get_region_id_from_csv(data_frame, city, state_or_province):
+    """
+    Retrieve RegionID for the specified city and state from a DataFrame.
+
+    Args:
+    - data_frame (DataFrame): DataFrame containing city data.
+    - city (str): Name of the city.
+    - state_or_province (str): Name of the state or province.
+
+    Returns:
+    - int: RegionID of the city. None if not found.
+    """
+    # Matching city and state name to get RegionID
+    matching_row = data_frame[
+        (data_frame["city"] == city) & (
+            data_frame["state_name"] == state_or_province)
+    ]
+
+    if not matching_row.empty:
+        return int(matching_row["RegionID"].iloc[0])
+    return None
+
+
+def generate_zillow_url(data_frame, city, state_or_province, lat, lng, region_id=None):
     """
     Generate a Zillow search URL based on the given parameters.
 
@@ -107,11 +130,16 @@ def generate_zillow_url(city, state_or_province, lat, lng):
     - state_or_province (str): Name of the state or province.
     - lat (float): Latitude of the city's center.
     - lng (float): Longitude of the city's center.
+    - region_id (int, optional): ID of the region.
 
     Returns:
     - str: A URL string for Zillow search based on the given parameters.
     """
     base_url = "https://www.zillow.com"
+
+    # 도시의 이름에서 공백은 '-'로 대체합니다.
+    city = city.replace(" ", "-")
+    region_id = get_region_id_from_csv(data_frame, city, state_or_province)
 
     # 대략적인 지도의 경계값을 계산합니다 (예: +/-0.5도)
     north = lat + 0.5
@@ -122,8 +150,11 @@ def generate_zillow_url(city, state_or_province, lat, lng):
     # URL 섹션을 별도로 구성합니다
     url_path = f"{base_url}/{city.lower()}-{state_or_province.lower()}/"
     query_pagination = "%7B%22pagination%22%3A%7B%7D%2C"
+    query_user_term = f"%22usersSearchTerm%22%3A%22{city}%2C%20{state_or_province}%22%2C"
     query_map_bounds = (f"%22mapBounds%22%3A%7B%22north%22%3A{north}%2C%22east%22%3A{east}%2C"
                         f"%22south%22%3A{south}%2C%22west%22%3A{west}%7D%2C")
+    query_region = (f"%22regionSelection%22%3A%5B%7B%22regionId%22%3A{region_id}%2C%22regionType%22%3A6%7D%5D%2C"
+                    if region_id else "")
     query_map_vis = "%22isMapVisible%22%3Atrue%2C"
     query_filter_state = (
         "%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C"
@@ -135,7 +166,9 @@ def generate_zillow_url(city, state_or_province, lat, lng):
     url = (
         f"{url_path}?searchQueryState="
         f"{query_pagination}"
+        f"{query_user_term}"
         f"{query_map_bounds}"
+        f"{query_region}"
         f"{query_map_vis}"
         f"{query_filter_state}"
         f"{query_list_vis}"
