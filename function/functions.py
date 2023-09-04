@@ -53,3 +53,57 @@ def download_file_from_gcs(filename, storage_client, bucket_name=BUCKET_NAME):
     content = blob.download_as_text()
     data_frame = pd.read_csv(io.StringIO(content))
     return data_frame
+
+
+def get_states_from_usa(data_frame):
+    """
+    Retrieve unique states from the provided DataFrame.
+
+    Parameters:
+    - data_frame (DataFrame): DataFrame containing the data of cities in the USA.
+
+    Returns:
+    List: A list of unique states.
+    """
+    return data_frame["state_name"].unique().tolist()
+
+
+def get_provinces_from_canada(data_frame):
+    """
+    Retrieve unique provinces from the provided DataFrame.
+
+    Parameters:
+    - data_frame (DataFrame): DataFrame containing the data of cities in Canada.
+
+    Returns:
+    List: A list of unique provinces.
+    """
+    return data_frame["province_name"].unique().tolist()
+
+
+def get_cities_from_state(data_frame, state_name):
+    """
+    Retrieve cities for the specified state.
+
+    Parameters:
+    - df (DataFrame): DataFrame containing the data of cities in the USA.
+    - state_name (str): Name of the state to retrieve cities for.
+
+    Returns:
+    List: A list of cities for the specified state.
+    """
+    return data_frame[data_frame["state_name"] == state_name]["city"].tolist()
+
+
+def get_cities_from_province(data_frame, province_name):
+    """
+    Retrieve cities for the specified province.
+
+    Parameters:
+    - df (DataFrame): DataFrame containing the data of cities in Canada.
+    - province_name (str): Name of the province to retrieve cities for.
+
+    Returns:
+    List: A list of cities for the specified province.
+    """
+    return data_frame[data_frame["province_name"] == province_name]["city"].tolist()
