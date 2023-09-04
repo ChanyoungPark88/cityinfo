@@ -107,7 +107,7 @@ def get_cities(state_code):
     })
 
     data = response.json()
-    st.write(data)
+    # st.write(data)
     return data['geonames']
 
 
