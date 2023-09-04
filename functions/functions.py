@@ -60,7 +60,7 @@ def get_state_code(country_name, state_name):
             if subdivision.name == state_name:
                 return subdivision.code.split('-')[-1]  # 'US-CA'에서 'CA' 부분만 반환
         return None
-    except Exception:
+    except (AttributeError, KeyError):
         return None
 
 

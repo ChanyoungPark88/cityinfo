@@ -2,7 +2,7 @@
 based on the user's country, state, and city selections.
 """
 from library.libraries import st
-from functions.functions import get_country_code, get_states, get_cities
+from functions.functions import get_country_code, get_states, get_state_code, get_cities
 
 st.title("Zillow Search URL Generator using Country, State, and City")
 
@@ -22,11 +22,16 @@ if selected_country_name != "Select a country":
         "Select a state", ["Select a state"] + state_names)
 
     if selected_state_name != "Select a state":
-        selected_state_code_temp = next(
+        # GeonameId (정수값)을 가져옵니다.
+        selected_state_geonameId = next(
             state["code"] for state in state_data if state["name"] == selected_state_name)
-        selected_state_code = selected_state_code_temp.lower() if isinstance(
-            selected_state_code_temp, str) else selected_state_code_temp
+
+        # GeonameId를 사용하여 주의 코드를 가져옵니다. 예: "AL"
+        selected_state_code = get_state_code(
+            selected_country_name, selected_state_name)
+
         st.write(f"Selected state code: {selected_state_code}")
+
 
 # 선택된 주/지방의 이름을 주/지방 코드로 변환합니다.
 # selected_state_code = next(
