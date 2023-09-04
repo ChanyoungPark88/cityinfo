@@ -5,7 +5,7 @@ Attributes:
     GEONAMES_USERNAME (str): Username for the GeoNames API.
     COUNTRY_INFO_URL (str): URL for the country information API endpoint.
 """
-from library.libraries import os, requests, pycountry
+from library.libraries import os, requests, pycountry, st
 
 GEONAMES_URL = os.environ.get("GEONAMES_URL")
 GEONAMES_USERNAME = os.environ.get("GEONAMES_USERNAME")
