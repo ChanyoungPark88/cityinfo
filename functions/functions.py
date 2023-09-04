@@ -5,7 +5,7 @@ Attributes:
     GEONAMES_USERNAME (str): Username for the GeoNames API.
     COUNTRY_INFO_URL (str): URL for the country information API endpoint.
 """
-from library.libraries import os, requests, pycountry, st
+from library.libraries import os, requests, pycountry
 
 GEONAMES_URL = os.environ.get("GEONAMES_URL")
 GEONAMES_USERNAME = os.environ.get("GEONAMES_USERNAME")
@@ -92,45 +92,26 @@ def get_states(country_code):
     return [{"name": state["name"], "code": state["geonameId"]} for state in data["geonames"]]
 
 
-def get_cities(state_code):
-    """Obtain a list of cities for a specified state code.
+def get_cities(state_name, country_name):
+    """Obtain a list of cities for a specified state name.
 
     Args:
-        state_code (str): State code to retrieve cities for.
+        state_name (str): State name to retrieve cities for.
+        country_name (str): The country of the specified state.
 
     Returns:
         list: List of dictionaries containing city names and geoname IDs.
     """
+    state_code = get_state_code(country_name, state_name)
+
+    if not state_code:
+        return []
+
     response = requests.get(GEONAMES_URL, params={
         "geonameId": state_code,
         "username": GEONAMES_USERNAME
     })
 
     data = response.json()
-    st.write(data)
-    return data['geonames']
 
-
-def load_all_data():
-    """Gather a comprehensive set of location data.
-
-    Returns:
-        tuple: Tuple containing dictionaries of country codes to geoname IDs,
-        states to cities, and states to geoname IDs.
-    """
-    # 국가 코드와 ID 매핑
-    country_ids = get_all_country_geoname_ids()
-
-    # 캐나다와 미국만 필터링
-    filtered_country_ids = {code: id for code, id in country_ids.items() if code in [
-        'CA', 'US']}
-
-    # 각 국가별 주/지방 정보
-    all_states = {country_code: get_states(
-        country_code) for country_code in filtered_country_ids.keys()}
-
-    # 각 주/지방별 도시 정보
-    all_cities = {state['code']: get_cities(
-        state['code']) for states in all_states.values() for state in states}
-
-    return filtered_country_ids, all_states, all_cities
+    return data.get('geonames', [])
