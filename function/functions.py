@@ -107,3 +107,32 @@ def get_cities_from_province(data_frame, province_name):
     List: A list of cities for the specified province.
     """
     return data_frame[data_frame["province_name"] == province_name]["city"].tolist()
+
+
+def generate_zillow_url(city, state_or_province, lat, lng):
+    """_summary_
+
+    Args:
+        city (_type_): _description_
+        state_or_province (_type_): _description_
+        lat (_type_): _description_
+        lng (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
+    base_url = "https://www.zillow.com"
+
+    # 대략적인 지도의 경계값을 계산합니다 (예: +/-0.5도)
+    north = lat + 0.5
+    south = lat - 0.5
+    east = lng + 0.5
+    west = lng - 0.5
+
+    # URL을 생성합니다
+    url = (
+        f"{base_url}/{city}-{state_or_province}/?searchQueryState=%7B%22pagination%22%3A%7B%7D%2C"
+        f"%22mapBounds%22%3A%7B%22north%22%3A{north}%2C%22east%22%3A{east}%2C%22south%22%3A{south}%2C%22west%22%3A{west}%7D%2C"
+        "%22isMapVisible%22%3Atrue%2C%22filterState%22%3A%7B%22sort%22%3A%7B%22value%22%3A%22globalrelevanceex%22%7D%2C%22ah%22%3A%7B%22value%22%3Atrue%7D%7D%2C%22isListVisible%22%3Atrue%7D"
+    )
+    return url

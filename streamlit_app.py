@@ -5,7 +5,8 @@ from library.libraries import st
 from function.functions import (
     gcs_connect, download_file_from_gcs,
     get_provinces_from_canada, get_states_from_usa,
-    get_cities_from_province, get_cities_from_state
+    get_cities_from_province, get_cities_from_state,
+    generate_zillow_url
 )
 
 st.title("Zillow Search URL Generator using Country, State, and City")
@@ -34,9 +35,15 @@ elif selected_country_name == "Canada":
             selected_city = st.selectbox("Select a city", cities)
 
             if selected_city != "Select a city":
-                province_id = data_frame[data_frame["province_name"]
-                                         == selected_province].iloc[0]['province_id']
-                st.write(f"{selected_city}-{province_id}")
+                city_data = data_frame[data_frame["city"]
+                                       == selected_city].iloc[0]
+                city_lat = city_data['lat']
+                city_lng = city_data['lng']
+                province_id = city_data['province_id']
+
+                zillow_url = generate_zillow_url(
+                    selected_city, province_id, city_lat, city_lng)
+                st.write(f"Zillow URL: {zillow_url}")
 
 elif selected_country_name == "United States":
     FILENAME = "uscities_selected.csv"
@@ -53,6 +60,12 @@ elif selected_country_name == "United States":
             selected_city = st.selectbox("Select a city", cities)
 
             if selected_city != "Select a city":
-                state_id = data_frame[data_frame["state_name"]
-                                      == selected_state].iloc[0]['state_id']
-                st.write(f"{selected_city}-{state_id}")
+                city_data = data_frame[data_frame["city"]
+                                       == selected_city].iloc[0]
+                city_lat = city_data['lat']
+                city_lng = city_data['lng']
+                state_id = city_data['state_id']
+
+                zillow_url = generate_zillow_url(
+                    selected_city, state_id, city_lat, city_lng)
+                st.write(f"Zillow URL: {zillow_url}")
