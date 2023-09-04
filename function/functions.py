@@ -71,7 +71,9 @@ def get_states_from_usa(data_frame):
     Returns:
     List: A list of unique states.
     """
-    return data_frame["state_name"].dropna().astype(str).unique().tolist()
+    sorted_df = data_frame.sort_values(by="SizeRank")
+
+    return sorted_df["state_name"].dropna().astype(str).unique().tolist()
 
 
 def get_cities_from_state(data_frame, state_name):
@@ -79,13 +81,21 @@ def get_cities_from_state(data_frame, state_name):
     Retrieve cities for the specified state.
 
     Parameters:
-    - df (DataFrame): DataFrame containing the data of cities in the USA.
+    - data_frame (DataFrame): DataFrame containing the data of cities in the USA.
     - state_name (str): Name of the state to retrieve cities for.
 
     Returns:
     List: A list of cities for the specified state.
     """
-    return data_frame[data_frame["state_name"] == state_name]["city"].tolist()
+    if not state_name or state_name not in data_frame["state_name"].tolist():
+        # 선택한 주가 없거나 데이터프레임에 존재하지 않을 경우 빈 리스트를 반환합니다.
+        return []
+
+    # 'SizeRank' 기준으로 데이터프레임을 오름차순으로 정렬합니다.
+    sorted_df = data_frame.sort_values(by="SizeRank")
+
+    # 선택한 주(State)에 해당하는 도시들을 필터링하고, NaN 값을 제거한 후 문자열 리스트로 반환합니다.
+    return sorted_df[sorted_df["state_name"] == state_name]["city"].dropna().astype(str).tolist()
 
 
 def generate_zillow_url(city, state_or_province, lat, lng):

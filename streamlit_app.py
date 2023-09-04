@@ -24,13 +24,13 @@ elif selected_country_name == "United States":
     data_frame = download_file_from_gcs(FILENAME, storage_client)
     if data_frame is not None:
         # 주(State) 선택 드롭다운 생성
-        states = ["Select a state"] + sorted(get_states_from_usa(data_frame))
+        states = ["Select a state"] + get_states_from_usa(data_frame)
         selected_state = st.selectbox("Select a state", states)
 
         # 선택된 주(State)에 해당하는 도시 선택 드롭다운 생성
         if selected_state != "Select a state":
             cities = ["Select a city"] + \
-                sorted(get_cities_from_state(data_frame, selected_state))
+                get_cities_from_state(data_frame, selected_state)
             selected_city = st.selectbox("Select a city", cities)
 
             if selected_city != "Select a city":
