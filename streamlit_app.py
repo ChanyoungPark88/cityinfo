@@ -16,10 +16,10 @@ if selected_country_name != "Select a country":
     st.write(f"Selected country code: {selected_country_code}")
 
     # # 국가 코드를 사용하여 해당 국가의 주/지방 목록을 가져옵니다.
-    # state_data = get_states(selected_country_code)
-    # state_names = [state["name"] for state in state_data]
-    # selected_state_name = st.selectbox(
-    #     "Select a state", ["Select a state"] + state_names)
+    state_data = get_states(selected_country_code)
+    state_names = [state["name"] for state in state_data]
+    selected_state_name = st.selectbox(
+        "Select a state", ["Select a state"] + state_names)
 
     # if selected_state_name != "Select a state":
     #     # 선택된 주/지방의 이름을 주/지방 코드로 변환합니다.
