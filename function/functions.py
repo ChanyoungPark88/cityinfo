@@ -133,9 +133,8 @@ def generate_zillow_url(city, state_or_province, lat, lng, region_id, region_typ
     if region_type == "city":
         region_type_value = 6
     else:
-        region_type_value = 6  # 임의로 같은 값을 지정하였습니다. 필요시 수정이 필요합니다.
+        region_type_value = 6
 
-    # URL 섹션을 별도로 구성합니다
     url_path = f"{base_url}/{city.lower()}-{state_or_province.lower()}/houses/"
     query_pagination = "%7B%22pagination%22%3A%7B%7D%2C"
     query_user_term = f"%22userssearchterm%22%3A%22{city}%2C%20{state_or_province}%22%2C"
@@ -148,7 +147,6 @@ def generate_zillow_url(city, state_or_province, lat, lng, region_id, region_typ
                           "%22ah%22%3A%7B%22value%22%3Atrue%7D%2C%22mapzoom%22%3A11%7D%2C")
     query_list_vis = "%22islistvisible%22%3Atrue%7D"
 
-    # 섹션을 결합하여 최종 URL을 생성합니다
     url = (f"{url_path}?searchquerystate="
            f"{query_pagination}"
            f"{query_user_term}"
