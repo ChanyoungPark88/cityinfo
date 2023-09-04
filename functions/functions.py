@@ -108,7 +108,7 @@ def get_cities(state_code):
 
     data = response.json()
     st.write(data)
-    return data
+    return data['geonames']
 
 
 def load_all_data():
