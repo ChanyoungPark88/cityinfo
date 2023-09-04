@@ -147,7 +147,7 @@ def generate_zillow_url(city, state_or_province, lat, lng, region_id, region_typ
                           "%22ah%22%3A%7B%22value%22%3Atrue%7D%2C%22mapzoom%22%3A11%7D%2C")
     query_list_vis = "%22islistvisible%22%3Atrue%7D"
 
-    url = "".join([
+    url = " ".join([
         f"{url_path}?searchquerystate=",
         f"{query_pagination}",
         f"{query_user_term}",
